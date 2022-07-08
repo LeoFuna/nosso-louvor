@@ -1,0 +1,21 @@
+{
+  "presets": [
+    "next/babel"
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "next/babel"
+      ],
+      "plugins": [
+        ["babel-plugin-module-resolver", {
+          "root": ["."],
+          "alias": {
+            "environments": "./environments",
+            "imports": "./imports"
+          }
+        }]
+      ]
+    }
+  }
+}
