@@ -14,7 +14,64 @@ model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
+  name      String
+  lastName  String
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  musicRoles UserMusicRole[]
+  scale      UserScale[]
+}
+
+model MusicRole {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users  UserMusicRole[]
+  scales UserScale[]
+}
+
+model UserMusicRole {
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  musicRoleId Int
+  musicRole   MusicRole @relation(fields: [musicRoleId], references: [id])
+
+  @@id([userId, musicRoleId])
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
+model Scale {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user UserScale[]
+}
+
+model UserScale {
+  scaleId     Int
+  scale       Scale     @relation(fields: [scaleId], references: [id])
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  musicRoleId Int
+  musicRole   MusicRole @relation(fields: [musicRoleId], references: [id])
+
+  @@id([scaleId, userId, musicRoleId])
 }
