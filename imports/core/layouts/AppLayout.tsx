@@ -10,7 +10,7 @@ interface AppLayoutInterface {
   disableHamburguer?: boolean,
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     borderBottomWidth: 1,
     borderBottomStyle: 'solid',
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   stdMargin: {
     margin: '4px',
   },
-});
+}));
 
 function AppLayout({
   title,
@@ -36,7 +36,7 @@ function AppLayout({
       <Head>
         <title>{title}</title>
       </Head>
-      <AppBar className={classes.appBar}>
+      <AppBar elevation={0} className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
           <Box className={classes.toolBar}>
            { !disableHamburguer &&
@@ -61,7 +61,7 @@ function AppLayout({
         </Toolbar>
       </AppBar>
       <main>
-        <Box pl={3} pr={3}>
+        <Box pt={9} pl={3} pr={3}>
           {children}
         </Box>
       </main>
