@@ -1,3 +1,3 @@
-import listUsers from '../../../imports/users/api/user.api';
+import UsersApi from '../../../imports/users/api/user.api';
 
-export default listUsers;
+export default UsersApi;
