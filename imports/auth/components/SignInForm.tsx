@@ -1,7 +1,8 @@
 import { Box, Button, InputLabel, TextField } from '@mui/material';
 import { signIn } from 'next-auth/react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from 'imports/core/services/firebase';
+import { auth, db } from 'imports/core/services/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 import { Controller, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { GoogleLogo } from 'phosphor-react';
@@ -26,8 +27,19 @@ const SignInForm = () => {
         console.log(res);
       })
       .catch((e) => {
-        console.log(e)
+        console.log(e);
       });
+  }
+
+  async function testeFirestore() {
+    try {
+      const docRef = await getDocs(collection(db, "users"));
+      docRef.forEach((doc) => {
+        console.log(doc.data());
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 
   return (
@@ -61,7 +73,7 @@ const SignInForm = () => {
           />
         </Box>
         <Box textAlign='right'>
-          <Button onClick={() => console.log('submit com usuario e senha')}>
+          <Button onClick={() => testeFirestore()}>
             Entrar
           </Button>
         </Box>
