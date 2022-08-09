@@ -1,8 +1,5 @@
 import { Box, Button, InputLabel, TextField } from '@mui/material';
 import { signIn } from 'next-auth/react';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth, db } from 'imports/core/services/firebase';
-import { collection, getDocs } from 'firebase/firestore';
 import { Controller, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { GoogleLogo } from 'phosphor-react';
@@ -20,26 +17,10 @@ const SignInForm = () => {
     },
   });
 
-  function handleGoogleSignIn() {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+  function handleGoogleSignIn() { signIn('google', { callbackUrl: '/dashboards/scale' }); }
 
-  async function testeFirestore() {
-    try {
-      const docRef = await getDocs(collection(db, "users"));
-      docRef.forEach((doc) => {
-        console.log(doc.data());
-      });
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+  function onSubmit(data: LoginFormValues) {
+    signIn('credentials', { ...data, callbackUrl: '/dashboards/scale' });
   }
 
   return (
@@ -47,7 +28,7 @@ const SignInForm = () => {
       <Box textAlign='center' mb='24px'>
         <Image alt='ipbl logo' src='/ipbl-logo.png' width='250' height='250' style={{borderRadius: '10%'}} />
       </Box>
-      <form onSubmit={() => console.log('meu formulário')}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Box mb={2} mt={2} display='flex' alignItems='center'>
           <Box mr={1} width='80px'>
             <InputLabel>Usuário</InputLabel>
@@ -73,7 +54,7 @@ const SignInForm = () => {
           />
         </Box>
         <Box textAlign='right'>
-          <Button onClick={() => testeFirestore()}>
+          <Button type='submit'>
             Entrar
           </Button>
         </Box>
