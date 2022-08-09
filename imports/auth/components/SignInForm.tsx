@@ -2,7 +2,6 @@ import { Box, Button, InputLabel, TextField } from '@mui/material';
 import { signIn } from 'next-auth/react';
 import { Controller, useForm } from 'react-hook-form';
 import Image from 'next/image';
-import { GoogleLogo } from 'phosphor-react';
 
 type LoginFormValues = {
   username: string,
@@ -16,8 +15,6 @@ const SignInForm = () => {
       password: '',
     },
   });
-
-  function handleGoogleSignIn() { signIn('google', { callbackUrl: '/dashboards/scale' }); }
 
   function onSubmit(data: LoginFormValues) {
     signIn('credentials', { ...data, callbackUrl: '/dashboards/scale' });
@@ -56,12 +53,6 @@ const SignInForm = () => {
         <Box textAlign='right'>
           <Button type='submit'>
             Entrar
-          </Button>
-        </Box>
-        <Box textAlign='right'>
-          <Button onClick={handleGoogleSignIn} style={{ backgroundColor: '#046909', color: 'snow' }}>
-            <GoogleLogo style={{ marginRight: '7px', color: 'red', fontSize: '20px' }} />
-            Entrar com Google
           </Button>
         </Box>
       </form>

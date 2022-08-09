@@ -1,11 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import db from "../../../prisma";
 import bcrypt from "bcrypt";
 import { User } from "@prisma/client";
-import { FirestoreAdapter } from "@next-auth/firebase-adapter";
-import { firebaseConfig } from "imports/core/services/firebase";
 
 type LoginUser = {
   username: string,
@@ -18,7 +15,7 @@ const maxAge = 24 * 60 * 60;
 const authorize = async (credentials: LoginUser | undefined): Promise<User | null> => {
   try {
     if (!credentials?.username || !credentials?.password) return null;
-
+    // PEGAR OS DADOS DO USER NO FIREBASE E RETORNMAR
     const user = await db.user.findUnique({
       where: { username: credentials.username },
     });
@@ -43,12 +40,7 @@ export default NextAuth({
       },
       authorize,
     }),
-    GoogleProvider({
-      clientId: '471060799256-ib653mbmtllogtgqlcud6qkhmbs0mf8c.apps.googleusercontent.com',
-      clientSecret: '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',
-    }),
   ],
-  adapter: FirestoreAdapter(firebaseConfig),
   secret,
   jwt: {
     secret,
@@ -62,6 +54,10 @@ export default NextAuth({
     signOut: '/auth/signout',
   },
   callbacks: {
-
-  }
+    session({ session }) {
+      const currentSession = session;
+      currentSession.user = { name: 'Leonardo' };
+      return currentSession;
+    },
+  },
 });
